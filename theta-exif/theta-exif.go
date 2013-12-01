@@ -12,6 +12,31 @@ import (
 	"log"
 )
 
+const usageMessage = "" +
+	`'theta-exif' is a exif output tool of Ricoh Theta JPG image.
+
+Usage theta-exif:
+
+Display json format exif:
+    theta-exif -f R0010001.JPG
+
+Save to json file:
+    theta-exif -f R0010001.JPG -o exif.json
+
+Display text format exif:
+    theta-exif -t -f R0010001.JPG
+
+Print this usage:
+    theta-exif -help
+`
+
+func usage() {
+	fmt.Fprintln(os.Stderr, usageMessage)
+	fmt.Fprintln(os.Stderr, "Flags:")
+	flag.PrintDefaults()
+	os.Exit(2)
+}
+
 var inputfile = flag.String("f", "", "input file(jpeg)")
 var outputjson = flag.String("o", "", "output file(json)")
 var textmode = flag.Bool("t", false, "output a text format instead of json")
@@ -19,6 +44,7 @@ var textmode = flag.Bool("t", false, "output a text format instead of json")
 //var verbose = flag.String("v", "", "verbose")
 
 func main() {
+	flag.Usage = usage
 	flag.Parse()
 	if *inputfile == "" {
 		flag.Usage()
