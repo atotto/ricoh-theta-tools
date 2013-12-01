@@ -12,12 +12,18 @@ import (
 	"log"
 )
 
-var inputfile = flag.String("f", "", "input file(jpg)")
+var inputfile = flag.String("f", "", "input file(jpeg)")
 var outputjson = flag.String("o", "", "output file(json)")
-var verbose = flag.String("v", "", "verbose")
+var textmode = flag.Bool("t", false, "output a text format instead of json")
+
+//var verbose = flag.String("v", "", "verbose")
 
 func main() {
 	flag.Parse()
+	if *inputfile == "" {
+		flag.Usage()
+		os.Exit(2)
+	}
 
 	f, err := os.Open(*inputfile)
 	if err != nil {
@@ -30,6 +36,11 @@ func main() {
 	x, err := exif.Decode(f)
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	if *textmode == true {
+		fmt.Println(x.String())
+		os.Exit(0)
 	}
 
 	b, err := x.MarshalJSON()
@@ -45,5 +56,4 @@ func main() {
 	} else {
 		fmt.Println(string(b))
 	}
-	//fmt.Println(x.String())
 }
