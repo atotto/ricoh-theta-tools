@@ -2,6 +2,9 @@
 
 # Theta tools
 
+Downloads: https://drone.io/github.com/atotto/ricoh-theta-tools/files
+
+
 * theta-exif : Output exif information
 
 ```
