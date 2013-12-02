@@ -18,13 +18,13 @@ const usageMessage = "" +
 Usage theta-exif:
 
 Display json format exif:
-    theta-exif -f R0010001.JPG
+    theta-exif R0010001.JPG
 
 Save to json file:
-    theta-exif -f R0010001.JPG -o exif.json
+    theta-exif R0010001.JPG -o exif.json
 
 Display text format exif:
-    theta-exif -t -f R0010001.JPG
+    theta-exif R0010001.JPG -t
 
 Print this usage:
     theta-exif -help
@@ -37,21 +37,36 @@ func usage() {
 	os.Exit(2)
 }
 
-var inputfile = flag.String("f", "", "input file(jpeg)")
-var outputjson = flag.String("o", "", "output file(json)")
+var output = flag.String("o", "", "output file(default json format)")
 var textmode = flag.Bool("t", false, "output a text format instead of json")
 
 //var verbose = flag.String("v", "", "verbose")
 
+var inputfile = ""
+
 func main() {
 	flag.Usage = usage
 	flag.Parse()
-	if *inputfile == "" {
+
+	// Usage information when no arguments.
+	if flag.NFlag() == 0 && flag.NArg() == 0 {
 		flag.Usage()
-		os.Exit(2)
 	}
 
-	f, err := os.Open(*inputfile)
+	arg1 := os.Args[1]
+	if arg1[0] != '-' {
+		inputfile = os.Args[1]
+		os.Args = os.Args[1:]
+		flag.Parse()
+	} else {
+		inputfile = flag.Arg(0)
+	}
+
+	if inputfile == "" {
+		flag.Usage()
+	}
+
+	f, err := os.Open(inputfile)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -64,22 +79,23 @@ func main() {
 		log.Fatal(err)
 	}
 
+	var buf []byte
+
 	if *textmode == true {
-		fmt.Println(x.String())
-		os.Exit(0)
+		buf = []byte(x.String())
+	} else {
+		buf, err = x.MarshalJSON()
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
-	b, err := x.MarshalJSON()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	if *outputjson != "" {
-		err := ioutil.WriteFile(*outputjson, b, 0644)
+	if *output != "" {
+		err := ioutil.WriteFile(*output, buf, 0644)
 		if err != nil {
 			log.Fatal(err)
 		}
 	} else {
-		fmt.Println(string(b))
+		fmt.Println(string(buf))
 	}
 }

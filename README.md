@@ -4,17 +4,19 @@
 
 * theta-exif : Output exif information
 
+```
 Usage:
 
 Display json format exif:
-    theta-exif -f R0010001.JPG
+    theta-exif R0010001.JPG
 
 Save to json file:
-    theta-exif -f R0010001.JPG -o exif.json
+    theta-exif R0010001.JPG -o exif.json
 
 Display text format exif:
-    theta-exif -t -f R0010001.JPG
+    theta-exif R0010001.JPG -t
 
 Print this usage:
     theta-exif -help
+```
 
