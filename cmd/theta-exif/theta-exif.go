@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/atotto/ricoh-theta-tools/theta-exif/mknote"
+	"github.com/atotto/ricoh-theta-tools/exif/mknote"
 	"github.com/rwcarlsen/goexif/exif"
 
 	"io/ioutil"

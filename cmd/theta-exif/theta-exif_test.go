@@ -1,10 +1,11 @@
 package main_test
 
 import (
+	"testing"
+
 	"encoding/json"
 	"os"
 	"os/exec"
-	"testing"
 )
 
 const (
@@ -30,7 +31,7 @@ func TestCmd(t *testing.T) {
 	defer os.Remove(test_cmd)
 
 	// do exec
-	cmd = exec.Command(test_cmd, "fixture/Ver1.10.JPG")
+	cmd = exec.Command(test_cmd, "../../exif/fixture/Ver1.10.JPG")
 	out, err := cmd.Output()
 	if err != nil {
 		t.Fatal(err)
